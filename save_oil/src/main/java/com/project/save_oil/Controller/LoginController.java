@@ -59,4 +59,25 @@ public class LoginController {
 		memberService.save(memberDto);
 		return "redirect:/login";
 	}
+	
+	@GetMapping("/update")
+	public String update() {
+		return "update";
+	}
+	
+	@PostMapping("/update")
+	public String updateMember(HttpSession session, MemberDto memberDto) {
+		String id = (String)session.getAttribute("uId_Session");
+		Member member = Member.builder().password(memberDto.getPassword())
+				.carName(memberDto.getCarName())
+				.company(memberDto.getCompany())
+				.oilType(memberDto.getOilType())
+				.fuelEffi(memberDto.getFuelEffi()).build();
+		try {
+			memberService.update(id, member);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "redirect:/";
+	}
 }

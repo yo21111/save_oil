@@ -15,7 +15,7 @@ public class MainServiceTest {
 	MainService mService;
 	
 	@Test
-	public void find() {
+	public void find() throws Exception {
 		
 		Integer money = 50000;
 		Integer oilPrice = 1920;

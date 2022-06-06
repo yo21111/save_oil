@@ -87,8 +87,65 @@ public class KakaoApiFromAdress {
 		List<String> list = new ArrayList<>();
 		list.add(x);
 		list.add(y);
+		list = transFormPoint(list);
 		map.put("list", list);
 		
 		return map;
+	}
+	
+	public List<String> transFormPoint(List<String> list) {
+		String apiKey = "6780a1cac7918156f6e9b6e1e4b74f92";
+		String apiUrl = "https://dapi.kakao.com/v2/local/geo/transcoord.json";
+		String jsonString = null;
+
+		try {
+			String addr = apiUrl + "?x=" + list.get(0) + "&y="+list.get(1)
+				+ "&output_coord=KTM";
+
+			URL url = new URL(addr);
+			URLConnection conn = url.openConnection();
+			conn.setRequestProperty("Authorization", "KakaoAK " + apiKey);
+
+			BufferedReader rd = null;
+			rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+			StringBuffer docJson = new StringBuffer();
+
+			String line;
+
+			while ((line = rd.readLine()) != null) {
+				docJson.append(line);
+			}
+			
+			jsonString = docJson.toString();
+			
+			JSONParser jsonParser = new JSONParser();
+			JSONObject jsonObject = (JSONObject) jsonParser.parse(jsonString);
+			JSONArray dataList = (JSONArray) jsonObject.get("documents");
+			
+			String x = "";
+			String y = ""; 
+			for (int i = 0; i < dataList.size(); i++) {
+				JSONObject data = (JSONObject) dataList.get(i);
+				if(data.containsKey("x")) {
+					x = data.get("x").toString();
+				}
+				if(data.containsKey("y")) {
+					y = data.get("y").toString();
+				}
+			}
+			
+			list.set(0, x);
+			list.set(1, y);
+			
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 }

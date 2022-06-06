@@ -17,6 +17,10 @@
 			min-height: 100vh;
 		}
 
+		a#update {
+			transform: translateX(-50px);
+		}
+
 		a#logout {
 			transform: translateX(-50px);
 		}
@@ -44,17 +48,20 @@
 			<img id="Logo" class="mb-4" src="https://ifh.cc/g/AOtB7m.png" border="0" width="112" height="97" />
 			<h1 class="h1 mb-4 fw-normal">Save Oil</h1>
 		</div>
-		<a id="logout" href="/logout" class="btn mb-4 btn-outline-dark">로그아웃</a>
+		<div>
+			<a id="update" href="/update" class="btn mb-4 btn-outline-dark">개인정보 변경</a>
+			<a id="logout" href="/logout" class="btn mb-4 btn-outline-dark">로그아웃</a>
+		</div>
 	</header>
 	<div class="container">
 		<div class="input-form-backgroud row">
 			<div class="input-form col-md-12 mx-auto">
 				<h4 class="mb-3">주변 주유소 검색하기</h4>
-				<form class="validation-form" novalidate>
+				<form class="validation-form" novalidate method="post" action="/">
 					<div class="mb-3">
 						<label for="address">주소 검색</label>
 						<div class="d-flex align-items-center justify-content-between">
-							<input type="text" class="form-control col-md-10" id="address" placeholder="서울특별시 강남구"
+							<input readonly type="text" class="form-control col-md-10" id="address" placeholder="서울특별시 강남구"
 								name="address" required />
 							<button id="searchBtn" type="button" class="btn btn-outline-primary btn">주소 검색</button>
 						</div>
@@ -63,8 +70,8 @@
 					<div class="mb-3">
 						<label for="money">주유 금액 입력</label>
 						<div class="d-flex align-items-center justify-content-between">
-							<input type="text" class="form-control col-md-10" id="money" placeholder="숫자만 입력해주세요 ex) 100000"
-								name="money" required />
+							<input type="text" class="form-control col-md-10" id="money"
+								placeholder="숫자만 입력해주세요 ex) 100000" name="money" required />
 						</div>
 						<div class="invalid-feedback">숫자로만 희망 주유 금액을 입력해주세요.</div>
 					</div>
@@ -111,7 +118,9 @@
 	</div>
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-	<script src〓"https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.2/proj4.js" type〓"text/javascript"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.8.0/proj4.js"
+		integrity="sha512-ha3Is9IgbEyIInSb+4S6IlEwpimz00N5J/dVLQFKhePkZ/HywIbxLeEu5w+hRjVBpbujTogNyT311tluwemy9w=="
+		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script>
 		$(function () {
 			$("button#searchBtn").click(function () {
@@ -135,10 +144,10 @@
 							document.getElementById("address").value = jibunAddr;
 							dataAddress = jibunAddr;
 						}
-						
+
 						let wedo = "";
 						let gyongdo = ""
-						
+
 						$.ajax({
 							type: "POST", // 요청 메서드
 							url: "/address", // 요청 URI
@@ -150,21 +159,15 @@
 
 								console.log(list);
 
-								wedo = list[1];
-								gyongdo = list[0];
-								
-								let wgs84 = proj4.Proj(proj4.defs["EPSG:4326"]); //경위도
-								let grs80 = proj4.Proj(proj4.defs["EPSG:5179"]);
-								
-								let p = proj4.Point(wedo, gyongdo);								
-								p = proj4.transform(wgs84, grs80, p);
-								
-								$("input#x").val(p.x);
-								$("input#y").val(p.y);
+								wedo = list[0];
+								gyongdo = list[1];
+
+								$("input#x").val(wedo);
+								$("input#y").val(gyongdo);
 							},
-							error: function (request,status,error) {
+							error: function (request, status, error) {
 								alert("오류가 발생하였습니다. 다시 시도해주세요.");
-								console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+								console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
 							}, // 에러가 발생했을 때, 호출될 함수
 						}); // $.ajax()
 					},

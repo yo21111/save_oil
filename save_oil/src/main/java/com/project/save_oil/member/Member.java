@@ -8,10 +8,12 @@ import javax.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @Entity(name = "member")
 @Getter
+@Setter
 @Table(schema = "saveoil")
 public class Member{
 	@Id

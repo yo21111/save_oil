@@ -39,6 +39,8 @@ public class MainController {
 		
 		List<GasStationDto> list = new ArrayList<>();
 		
+		// 반경에 주유소가 없는 경우도 view에 표기!!!! - search
+		
 		//1. mainDto 내용을 바탕으로 반경내 주유소 결과 가져오기
 		
 		//2. 해당 내용을 반복문을 통해 List로 넣을 때 손익계산 로직 실행 후 Dto에 담기
