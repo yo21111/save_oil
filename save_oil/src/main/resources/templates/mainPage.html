@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>메인페이지</title>
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+	<link rel="stylesheet" href="/css/bootstrap.min.css" />
+	<script src="/js/bootstrap.bundle.min.js"></script>
+	<style>
+		body {
+			min-height: 100vh;
+		}
+
+		a#logout {
+			transform: translateX(-50px);
+		}
+
+		.input-form {
+			max-width: 680px;
+
+			margin-top: 80px;
+			padding: 32px;
+
+			background: #fff;
+			-webkit-border-radius: 10px;
+			-moz-border-radius: 10px;
+			border-radius: 10px;
+			-webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+			-moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+			box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+		}
+	</style>
+</head>
+
+<body>
+	<header class="blog-header d-flex w-100% justify-content-between align-items-center">
+		<div class="d-flex align-items-center">
+			<img id="Logo" class="mb-4" src="https://ifh.cc/g/AOtB7m.png" border="0" width="112" height="97" />
+			<h1 class="h1 mb-4 fw-normal">Save Oil</h1>
+		</div>
+		<a id="logout" href="/logout" class="btn mb-4 btn-outline-dark">로그아웃</a>
+	</header>
+	<div class="container">
+		<div class="input-form-backgroud row">
+			<div class="input-form col-md-12 mx-auto">
+				<h4 class="mb-3">주변 주유소 검색하기</h4>
+				<form class="validation-form" novalidate>
+					<div class="mb-3">
+						<label for="address">주소 검색</label>
+						<div class="d-flex align-items-center justify-content-between">
+							<input type="text" class="form-control col-md-10" id="address" placeholder="서울특별시 강남구"
+								name="address" required />
+							<button id="searchBtn" type="button" class="btn btn-outline-primary btn">주소 검색</button>
+						</div>
+						<div class="invalid-feedback">주소를 입력해주세요.</div>
+					</div>
+					<div class="mb-3">
+						<label for="money">주유 금액 입력</label>
+						<div class="d-flex align-items-center justify-content-between">
+							<input type="text" class="form-control col-md-10" id="money" placeholder="숫자만 입력해주세요 ex) 100000"
+								name="money" required />
+						</div>
+						<div class="invalid-feedback">숫자로만 희망 주유 금액을 입력해주세요.</div>
+					</div>
+					<div class="mb-3">
+						<label for="radius">유류 선택</label>
+						<select class="custom-select d-block w-100" id="oiltype" name="oilType">
+							<option value="B027">휘발유</option>
+							<option value="D047">경유</option>
+							<option value="B034">고급휘발유</option>
+						</select>
+						<div class="invalid-feedback">주유하시려는 유류를 선택해주세요.</div>
+					</div>
+					<div class="mb-3">
+						<label for="oiltype">검색 반경</label>
+						<select class="custom-select d-block w-100" id="radius" name="radius">
+							<option value="1000">1km</option>
+							<option value="3000">3km</option>
+							<option value="5000">5km</option>
+						</select>
+						<div class="invalid-feedback">검색하시는 반경을 선택해주세요.</div>
+					</div>
+					<div class="mb-3">
+						<label for="sort">검색 기준</label>
+						<select class="custom-select d-block w-100" id="sort" name="sort">
+							<option value="1">가격 우선</option>
+							<option value="2">거리 우선</option>
+						</select>
+						<div class="invalid-feedback">검색하시는 기준을 선택해주세요.</div>
+					</div>
+
+					<hr class="mb-4" />
+
+					<div class="mb-4"></div>
+					<input type="text" name="x" id="x" />
+					<input type="text" name="y" id="y" />
+					<button class="btn btn-primary btn-lg btn-block" type="submit">검색 하기</button>
+				</form>
+			</div>
+		</div>
+
+		<footer class="my-3 text-center text-small">
+			<p class="mb-1">&copy; 2022 Save Oil</p>
+		</footer>
+	</div>
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script>
+		$(function () {
+			$("button#searchBtn").click(function () {
+				new daum.Postcode({
+					oncomplete: function (data) {
+
+						// 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+						// 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
+						// 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+						var roadAddr = data.roadAddress; // 도로명 주소 변수
+						var jibunAddr = data.jibunAddress; // 지번 주소 변수
+						// 우편번호와 주소 정보를 해당 필드에 넣는다.
+
+						let dataAddress = "";
+
+						document.getElementById("address").value = data.zonecode;
+						if (roadAddr !== "") {
+							document.getElementById("address").value = roadAddr;
+							dataAddress = roadAddr;
+						} else if (jibunAddr !== "") {
+							document.getElementById("address").value = jibunAddr;
+							dataAddress = jibunAddr;
+						}
+						
+						let wedo = "";
+						let gyongdo = ""
+						
+						$.ajax({
+							type: "POST", // 요청 메서드
+							url: "/address", // 요청 URI
+							headers: {"content-type": "application/json;"}, // 요청 헤더
+							dataType: "json", // 전송받을 데이터의 타입
+							data: dataAddress, // 서버로 전송할 데이터. stringify()로 직렬화 필요.
+							success: function (result) {
+								let list = result.list;
+
+								console.log(list);
+
+								wedo = list[1];
+								gyongdo = list[0];
+								$("input#x").val(wedo);
+								$("input#y").val(gyongdo);
+							},
+							error: function (request,status,error) {
+								alert("오류가 발생하였습니다. 다시 시도해주세요.");
+								console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+							}, // 에러가 발생했을 때, 호출될 함수
+						}); // $.ajax()
+					},
+				}).open();
+			});
+		});
+
+		window.addEventListener(
+			"load",
+			() => {
+				const forms = document.getElementsByClassName("validation-form");
+
+				Array.prototype.filter.call(forms, (form) => {
+					form.addEventListener(
+						"submit",
+						function (event) {
+							if (form.checkValidity() === false) {
+								event.preventDefault();
+								event.stopPropagation();
+							}
+
+							form.classList.add("was-validated");
+						},
+						false
+					);
+				});
+			},
+			false
+		);
+	</script>
+</body>
+
+</html>

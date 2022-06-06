@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Save Oil</title>
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+	<link rel="stylesheet" href="/css/bootstrap.min.css" />
+	<script src="/js/bootstrap.bundle.min.js"></script>
+	<style>
+		body {
+			min-height: 100vh;
+
+			background: -webkit-gradient(linear, left bottom, right top, from(#92b5db), to(#f5f5f5));
+			background: -webkit-linear-gradient(bottom left, #92b5db 0%, #f5f5f5 100%);
+			background: -moz-linear-gradient(bottom left, #92b5db 0%, #f5f5f5 100%);
+			background: -o-linear-gradient(bottom left, #92b5db 0%, #f5f5f5 100%);
+			background: linear-gradient(to top right, #92b5db 0%, #f5f5f5 100%);
+		}
+
+		.input-form {
+			max-width: 680px;
+
+			margin-top: 80px;
+			padding: 32px;
+
+			background: #fff;
+			-webkit-border-radius: 10px;
+			-moz-border-radius: 10px;
+			border-radius: 10px;
+			-webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+			-moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+			box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+		}
+
+		button#searchBtn {
+			display: inline-block;
+			height: 37px;
+			transform: translateY(-3px);
+		}
+
+		div.modal-content {
+			width: 1000px;
+			left: -250px;
+		}
+
+		div#md-content div.row div {
+			justify-content: center;
+		}
+
+		div#modal-list div:hover {
+			font-weight: bold;
+			cursor: pointer;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<div class="input-form-backgroud row">
+			<div class="input-form col-md-12 mx-auto">
+				<h4 class="mb-3">회원가입</h4>
+				<form class="validation-form" novalidate method="post" action="/register">
+					<div class="row">
+						<div class="col-md-6 mb-3">
+							<label for="name">아이디</label>
+							<input type="text" class="form-control" name="id" id="name" placeholder="" required />
+							<div class="invalid-feedback">아이디를 입력해주세요.</div>
+						</div>
+						<div class="col-md-6 mb-3">
+							<label for="nickname">이름</label>
+							<input type="text" class="form-control" name="name" id="nickname" placeholder="" required />
+							<div class="invalid-feedback">이름을 입력해주세요.</div>
+						</div>
+					</div>
+
+					<div class="mb-3">
+						<label for="password">비밀번호</label>
+						<input type="password" name="password" class="form-control" id="password" placeholder=""
+							required />
+						<div id="pwMsg" class="invalid-feedback">비밀번호를 입력해주세요.</div>
+					</div>
+
+					<div class="mb-3">
+						<label for="passwordChk">비밀번호 확인</label>
+						<input type="password" class="form-control" id="passwordChk" placeholder="" required />
+						<div id="pwChkMsg" class="invalid-feedback">비밀번호와 동일하게 입력해주세요.</div>
+					</div>
+
+					<div class="mb-3">
+						<label for="address2" style="display: block">차량정보</label>
+						<input type="text" style="display: inline-block" name="carName" class="form-control col-md-9"
+							id="carName" placeholder="검색 버튼을 눌러주세요." required />
+						<button class="btn btn-outline-primary col-md-2 btn-sm" id="searchBtn" type="button">검색</button>
+						<div class="invalid-feedback">차량 정보를 검색해주세요.</div>
+						<input type="hidden" name="company" class="form-control" id="company" />
+						<input type="hidden" name="oilType" class="form-control" id="oilType" />
+						<input type="hidden" name="fuelEffi" class="form-control" id="fuelEffi" />
+					</div>
+
+					<div class="modal fade" id="testModal" tabindex="-1" role="dialog"
+						aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">차량 기종 선택</h5>
+								</div>
+								<div class="modal-body" id="md-content">
+									<div id="modal-table" class="d-flex row">
+										<div class='col-1 border'>번호</div>
+										<div class='col-2 border'>회사명</div>
+										<div class='col-5 border'>모델명</div>
+										<div class='col-2 border'>유류 종류</div>
+										<div class='col-2 border'>복합 연비</div>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button class="btn-outline-primary" type="button" data-dismiss="modal">닫기</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<hr class="mb-4" />
+					<div class="custom-control custom-checkbox">
+						<input type="checkbox" class="custom-control-input" id="aggrement" required />
+						<label class="custom-control-label" for="aggrement">개인정보 수집 및 이용에 동의합니다.</label>
+					</div>
+					<div class="mb-4"></div>
+					<button class="btn btn-primary btn-lg btn-block" type="submit">가입 완료</button>
+					<a class="btn btn-outline-primary btn-lg btn-block" href="/login">로그인 페이지로</a>
+				</form>
+			</div>
+		</div>
+		<footer class="my-3 text-center text-small">
+			<p class="mb-1">&copy; 2022 Save Oil</p>
+		</footer>
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script>
+		$(function () {
+			$("div.modal-footer button").click(function () {
+				$("#testModal").modal("hide");
+			});
+			
+			$("input#passwordChk").keyup(function(){
+				let pw = $("input#password").val();
+				let pwChk = $("input#passwordChk").val();
+				
+				if(pw != pwChk) {
+					$("div#pwChkMsg").show();
+				} else {
+					$("div#pwChkMsg").hide();
+				}
+			});
+			
+			$("input#password").keyup(function(){
+				let pw = $("input#password").val();
+				let pwChk = $("input#passwordChk").val();
+				
+				if(pw != pwChk) {
+					$("div#pwChkMsg").show();
+				} else {
+					$("div#pwChkMsg").hide();
+				}
+			});
+			
+			
+			$("#searchBtn").click(function (e) {
+				let search = {"search": $("input#carName").val()};
+				$.ajax({
+					type: 'POST',       // 요청 메서드
+					url: '/data',  // 요청 URI
+					headers: {"content-type": "application/json;"}, // 요청 헤더
+					dataType: 'json', // 전송받을 데이터의 타입
+					data: JSON.stringify(search),  // 서버로 전송할 데이터. stringify()로 직렬화 필요.
+					success: function (result) {
+						$("div#modal-list").remove();
+						$("div#modal-table").append("<div id='modal-list'></div>");
+						if (result.length == 0) {
+							$("div#modal-list").append("<div>조회된 결과가 없습니다.</div>");
+						} else {
+							let data = "";
+							for (let i = 0; i < result.length; i++) {
+								data += "<div class='d-flex row'>";
+								data += "<div class='col-1 border'>" + (i + 1) + "</div>"
+								data += "<div class='col-2 border'>" + result[i].company + "</div>"
+								data += "<div class='col-5 border'>" + result[i].carName + "</div>"
+								data += "<div class='col-2 border'>" + result[i].oilType + "</div>"
+								data += "<div class='col-2 border'>" + result[i].fuelEffi + "</div>"
+								data += "</div>";
+							}
+							$("div#modal-list").append(data);
+
+							$("div#modal-list div").click(function () {
+								alert("click");
+								let company = $(this).children().eq(1).text();
+								let carName = $(this).children().eq(2).text();
+								let oilType = $(this).children().eq(3).text();
+								let fuelEffi = $(this).children().eq(4).text();
+								
+								$("input#company").val(company);
+								$("input#carName").val(carName);
+								$("input#oilType").val(oilType);
+								$("input#fuelEffi").val(fuelEffi);
+								
+								$("#testModal").modal("hide");
+							});
+						}
+						e.preventDefault();
+						$("#testModal").modal("show");
+					},
+					error: function () {
+						alert("오류가 발생하였습니다. 다시 시도해주세요.");
+					} // 에러가 발생했을 때, 호출될 함수
+				}); // $.ajax()
+			});
+
+		});
+
+
+		window.addEventListener('load', () => {
+			const forms = document.getElementsByClassName('validation-form');
+
+			Array.prototype.filter.call(forms, (form) => {
+				form.addEventListener('submit', function (event) {
+					if (form.checkValidity() === false) {
+						event.preventDefault();
+						event.stopPropagation();
+					}
+
+					form.classList.add('was-validated');
+				}, false);
+			});
+		}, false);
+	</script>
+</body>
+
+</html>

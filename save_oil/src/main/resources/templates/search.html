@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>차트페이지</title>
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+
+    <style>
+      body {
+        min-height: 100vh;
+      }
+
+      a#logout {
+        transform: translateX(-50px);
+      }
+
+      .input-form {
+        max-width: 1200px;
+
+        margin-top: 80px;
+        padding: 32px;
+
+        background: #fff;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        -webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+        -moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+        box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+      }
+
+      table th:first-child {
+        min-width: 130px;
+      }
+
+      table td:nth-child(4)::after {
+        content: " km";
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="blog-header d-flex w-100% justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <img id="Logo" class="mb-4" src="https://ifh.cc/g/AOtB7m.png" border="0" width="112" height="97" />
+        <h1 class="h1 mb-4 fw-normal">Save Oil</h1>
+      </div>
+      <a id="logout" href="/logout" class="btn mb-4 btn-outline-dark">로그아웃</a>
+    </header>
+    <div class="container">
+      <div class="input-form-backgroud row">
+        <div class="input-form col-md-12 mx-auto">
+          <h4 class="mb-3">검색 결과</h4>
+
+          <div id="columnchart_material" style="width: 1000px; height: 500px"></div>
+          <hr />
+          <h2>세부 결과</h2>
+          <div class="table-responsive">
+            <table class="table table-striped table-sm text-center">
+              <thead>
+                <tr>
+                  <th class="col-2" scope="col">순위 : [[${sort 변환}]]</th>
+                  <th scope="col">주유소 이름</th>
+                  <th scope="col">Save</th>
+                  <th scope="col">거리 (단위 : km)</th>
+                  <th scope="col">자세히 보기</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1,001</td>
+                  <td>random</td>
+                  <td>data</td>
+                  <td>placeholder</td>
+                  <td>
+                    <!-- /detail?UNI_ID=${list[i].UNI_ID} -->
+                    <a class="btn py-0 btn-outline-dark" href="">이동</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>1,002</td>
+                  <td>placeholder</td>
+                  <td>irrelevant</td>
+                  <td>visual</td>
+                  <td>layout</td>
+                </tr>
+                <tr>
+                  <td>1,003</td>
+                  <td>data</td>
+                  <td>rich</td>
+                  <td>dashboard</td>
+                  <td>tabular</td>
+                </tr>
+                <tr>
+                  <td>1,003</td>
+                  <td>information</td>
+                  <td>placeholder</td>
+                  <td>illustrative</td>
+                  <td>data</td>
+                </tr>
+                <tr>
+                  <td>1,004</td>
+                  <td>text</td>
+                  <td>random</td>
+                  <td>layout</td>
+                  <td>dashboard</td>
+                </tr>
+                <tr>
+                  <td>1,005</td>
+                  <td>dashboard</td>
+                  <td>irrelevant</td>
+                  <td>text</td>
+                  <td>placeholder</td>
+                </tr>
+                <tr>
+                  <td>1,006</td>
+                  <td>dashboard</td>
+                  <td>illustrative</td>
+                  <td>rich</td>
+                  <td>data</td>
+                </tr>
+                <tr>
+                  <td>1,007</td>
+                  <td>placeholder</td>
+                  <td>tabular</td>
+                  <td>information</td>
+                  <td>irrelevant</td>
+                </tr>
+                <tr>
+                  <td>1,008</td>
+                  <td>random</td>
+                  <td>data</td>
+                  <td>placeholder</td>
+                  <td>text</td>
+                </tr>
+                <tr>
+                  <td>1,009</td>
+                  <td>placeholder</td>
+                  <td>irrelevant</td>
+                  <td>visual</td>
+                  <td>layout</td>
+                </tr>
+                <tr>
+                  <td>1,010</td>
+                  <td>data</td>
+                  <td>rich</td>
+                  <td>dashboard</td>
+                  <td>tabular</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="text-right">
+            <a class="btn btn-primary" href="/">메인페이지로</a>
+          </div>
+        </div>
+      </div>
+
+      <footer class="my-3 text-center text-small">
+        <p class="mb-1">&copy; 2022 Save Oil</p>
+      </footer>
+    </div>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+      google.charts.load("current", { packages: ["bar"] });
+      google.charts.setOnLoadCallback(drawChart);
+
+      var options = {
+        chart: {
+          title: "Save : 주유한 기름 - 주유소까지 이동하면서 사용한 기름",
+          legend: "none",
+        },
+      };
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ["주유소 이름", "Save"],
+          ["Dialogue 1", 0.5],
+          ["Dialogue 2", 0.7],
+          ["Dialogue 3", 0.4],
+          ["Dialogue 4", 0.2],
+          ["Dialogue 5", 0.2],
+          ["Dialogue 6", 0.2],
+          ["Dialogue 7", 0.2],
+          ["Dialogue 8", 0.2],
+          ["Dialogue 9", 0.2],
+          ["Dialogue 10", 0.2],
+        ]);
+
+        var chart = new google.charts.Bar(document.getElementById("columnchart_material"));
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+      }
+
+       $(function () {});
+    </script>
+  </body>
+</html>
