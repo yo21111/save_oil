@@ -21,7 +21,11 @@ import lombok.RequiredArgsConstructor;
 public class MainController {
 	
 	@GetMapping("/")
-	public String main() {
+	public String main(HttpSession session) {
+		// 세션에 저장된 값이 남아있지 않도록 메인페이지에서는 null값 입력
+		if(session.getAttribute("MainSearchDto") != null) {
+			session.setAttribute("MainSearchDto", null);
+		}
 		return "mainPage";
 	}
 	
