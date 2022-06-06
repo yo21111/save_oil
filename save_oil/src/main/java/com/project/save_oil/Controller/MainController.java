@@ -27,7 +27,10 @@ public class MainController {
 	
 	@PostMapping("/")
 	public String searchPage(HttpSession session, Model m, @ModelAttribute MainSearchDto mainDto) {
-		session.setAttribute("MainSearchDto", mainDto);
+		// 세부페이지에서 리스트로 돌아오는 경우 제외
+		if(session.getAttribute("MainSearchDto") == null) {
+			session.setAttribute("MainSearchDto", mainDto);
+		}
 		
 		List<GasStationDto> list = new ArrayList<>();
 		
