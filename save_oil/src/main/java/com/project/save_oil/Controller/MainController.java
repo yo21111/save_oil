@@ -30,17 +30,18 @@ public class MainController {
 	}
 	
 	@PostMapping("/")
-	public String searchPage(HttpSession session, Model m, @ModelAttribute MainSearchDto mainDto) {
+	public String searchPage(HttpSession session, Model m, @ModelAttribute(name = "mainDto") MainSearchDto mainDto) {
 		// 세부페이지에서 리스트로 돌아오는 경우 제외
 		if(session.getAttribute("MainSearchDto") == null) {
 			session.setAttribute("MainSearchDto", mainDto);
+			m.addAttribute("mainDto", mainDto);
 		}
 		
 		List<GasStationDto> list = new ArrayList<>();
 		
 		//1. mainDto 내용을 바탕으로 반경내 주유소 결과 가져오기
 		
-		//2. 해당 내용을 반복문을 통해 List로 넣을 때 손익계산 로직 실행하기
+		//2. 해당 내용을 반복문을 통해 List로 넣을 때 손익계산 로직 실행 후 Dto에 담기
 		
 		//3. List<MainSearchDto> 를 모델에 담기
 		
@@ -50,11 +51,22 @@ public class MainController {
 	}
 	
 	@GetMapping("/detail")
-	public String resultPage(Model m, String UNI_ID, HttpSession session) {
+	public String resultPage(Model m, String UNI_ID, Double save, HttpSession session) {
 		MainSearchDto mainDto = (MainSearchDto)session.getAttribute("MainSearchDto");
 		if(mainDto == null) {
 			return "redirect:/";
 		}
+		
+		GasStationDto gasDto = null;
+		
+		// UNI_ID 값을 바탕으로 주유소 세부 정보 가져오기
+		// gasDto에 해당 값들 넣어주기
+		
+		gasDto.setSave(save);
+		
+		
+		m.addAttribute("mainDto", mainDto);
+		m.addAttribute("gasDto", gasDto);
 		
 		return "detail";
 	}

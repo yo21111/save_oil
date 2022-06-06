@@ -111,6 +111,7 @@
 	</div>
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src〓"https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.2/proj4.js" type〓"text/javascript"></script>
 	<script>
 		$(function () {
 			$("button#searchBtn").click(function () {
@@ -151,8 +152,15 @@
 
 								wedo = list[1];
 								gyongdo = list[0];
-								$("input#x").val(wedo);
-								$("input#y").val(gyongdo);
+								
+								let wgs84 = proj4.Proj(proj4.defs["EPSG:4326"]); //경위도
+								let grs80 = proj4.Proj(proj4.defs["EPSG:5179"]);
+								
+								let p = proj4.Point(wedo, gyongdo);								
+								p = proj4.transform(wgs84, grs80, p);
+								
+								$("input#x").val(p.x);
+								$("input#y").val(p.y);
 							},
 							error: function (request,status,error) {
 								alert("오류가 발생하였습니다. 다시 시도해주세요.");

@@ -53,7 +53,7 @@
     </style>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xxb8750c3d0c014988ab99886b73585a37"></script>
-    <script type="text/javascript">
+    <script th:inline="javascript" type="text/javascript">
       var map;
       var markerInfo;
       //출발지,도착지 마커
@@ -110,11 +110,11 @@
             async: false,
             data: {
               appKey: "l7xxb8750c3d0c014988ab99886b73585a37",
-              startX: "126.9850380932383",
-              startY: "37.566567545861645",
-              endX: "127.10331814639885",
-              endY: "37.403049076341794",
-              reqCoordType: "WGS84GEO",
+              startX: /*[[${mainDto.x}]]*/ "126.9850380932383",
+              startY: /*[[${mainDto.y}]]*/ "37.566567545861645",
+              endX: /*[[${gasDto.GIS_X_COOR}]]*/ "127.10331814639885",
+              endY: /*[[${gasDto.GIS_Y_COOR}]]*/ "37.403049076341794",
+              reqCoordType: "KATECH",
               resCoordType: "EPSG3857",
               searchOption: searchOption,
               trafficInfo: trafficInfochk,
@@ -500,31 +500,36 @@
               <tbody>
                 <tr>
                   <td>주유소 이름</td>
-                  <td>상표 + 상호</td>
+                  <td th:text="">상표 + 상호</td>
                 </tr>
                 <tr>
                   <td>위치</td>
-                  <td>도로명 주소</td>
+                  <td th:text="">도로명 주소</td>
                 </tr>
                 <tr>
                   <td>Save 정도</td>
-                  <td>save된 값</td>
+                  <td th:text="">save된 값</td>
                 </tr>
                 <tr>
                   <td>전화번호</td>
-                  <td>전화번호 값</td>
+                  <td th:text="">전화번호 값</td>
                 </tr>
                 <tr>
                   <td>업종 구분</td>
-                  <td>(N:주유소, Y:자동차충전소, C:주유소/충전소 겸업)</td>
+                  <td th:switch="">
+                  	(N:주유소, Y:자동차충전소, C:주유소/충전소 겸업)
+                  	<span th:case="N">주유소</span>
+                  	<span th:case="Y">자동차충전소</span>
+                  	<span th:case="C">주유소/충전소</span>
+                  </td>
                 </tr>
                 <tr>
                   <td>세차장 존재 여부</td>
-                  <td>y/n</td>
+                  <td th:text="">Y/N</td>
                 </tr>
                 <tr>
                   <td>편의점 존재 여부</td>
-                  <td>y/n</td>
+                  <td th:text="">Y/N</td>
                 </tr>
               </tbody>
             </table>
