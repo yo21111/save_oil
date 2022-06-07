@@ -198,7 +198,6 @@
 							$("div#modal-list").append(data);
 
 							$("div#modal-list div").click(function () {
-								alert("click");
 								let company = $(this).children().eq(1).text();
 								let carName = $(this).children().eq(2).text();
 								let oilType = $(this).children().eq(3).text();
@@ -215,9 +214,10 @@
 						e.preventDefault();
 						$("#testModal").modal("show");
 					},
-					error: function () {
-						alert("오류가 발생하였습니다. 다시 시도해주세요.");
-					} // 에러가 발생했을 때, 호출될 함수
+					error: function (request, status, error) {
+								alert("오류가 발생하였습니다. 다시 시도해주세요.");
+								console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+							}, // 에러가 발생했을 때, 호출될 함수
 				}); // $.ajax()
 			});
 

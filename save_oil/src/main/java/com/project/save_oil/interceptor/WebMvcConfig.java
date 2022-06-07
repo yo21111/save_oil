@@ -9,7 +9,7 @@ public class WebMvcConfig implements WebMvcConfigurer{
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		String[] exclude = {"/login", "register"};
+		String[] exclude = {"/login", "/register", "/data"};
 
 		LoginInterceptor loginInterceptor = new LoginInterceptor();
 		registry.addInterceptor(loginInterceptor)
