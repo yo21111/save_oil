@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.project.save_oil.api.ApiKey;
 import com.project.save_oil.domain.GasStationDto;
 import com.project.save_oil.domain.MainSearchDto;
 import com.project.save_oil.service.MainService;
@@ -20,10 +21,11 @@ import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
 @Controller
-@Slf4j
 public class MainController {
 	@Autowired
 	MainService mainService;
+	@Autowired
+	private ApiKey API_KEY;
 	
 	@GetMapping("/")
 	public String main(HttpSession session) {
@@ -74,9 +76,7 @@ public class MainController {
 
 		m.addAttribute("mainDto", mainDto);
 		m.addAttribute("gasDto", gasDto);
-		
-		log.info(gasDto.toString());
-		
+		m.addAttribute("t_mapAppKey", API_KEY.getTMAP_API());
 		return "detail";
 	}
 	

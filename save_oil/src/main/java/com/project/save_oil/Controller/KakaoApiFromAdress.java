@@ -17,16 +17,21 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.save_oil.api.ApiKey;
+
 @RestController
 public class KakaoApiFromAdress {
-
+	@Autowired
+	private ApiKey API_KEY;
+	
 	@PostMapping("/address")
 	public Map<String, Object> getKakaoApiFromAddress(@RequestBody String dataAddress) {
-		String apiKey = "6780a1cac7918156f6e9b6e1e4b74f92";
+		String apiKey = API_KEY.getKAKAO_ADRESS();
 		String apiUrl = "https://dapi.kakao.com/v2/local/search/address.json";
 		String jsonString = null;
 		Map<String, Object> map = null;

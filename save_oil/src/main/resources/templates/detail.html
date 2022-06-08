@@ -49,7 +49,7 @@
 		}
 	</style>
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-	<script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xxb8750c3d0c014988ab99886b73585a37"></script>
+	<script th:inline="javascript"  th:src="@{https://apis.openapi.sk.com/tmap/jsv2(version=1, appKey=${t_mapAppKey})}"></script>
 	<script th:inline="javascript" type="text/javascript">
 		var map;
 		var markerInfo;
