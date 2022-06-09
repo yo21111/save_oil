@@ -63,6 +63,12 @@
 			font-weight: bold;
 			cursor: pointer;
 		}
+
+		.field-error {
+			border-color: #dc3545;
+			color: #dc3545;
+			font-weight: bold;
+		}
 	</style>
 </head>
 
@@ -71,25 +77,30 @@
 		<div class="input-form-backgroud row">
 			<div class="input-form col-md-12 mx-auto">
 				<h4 class="mb-3">회원가입</h4>
-				<form class="validation-form" novalidate method="post" action="/register">
+				<form class="validation-form" novalidate method="post" th:object="${member}" action="/register">
 					<div class="row">
 						<div class="col-md-6 mb-3">
 							<label for="name">아이디</label>
-							<input type="text" class="form-control" name="id" id="name" placeholder="" required />
+							<input type="text" class="form-control" th:field="*{id}" th:errorclass="field-error"
+								id="name" placeholder="" required />
 							<div class="invalid-feedback">아이디를 입력해주세요.</div>
+							<div th:errors="*{id}" class="field-error">입력값 오류메시지</div>
 						</div>
 						<div class="col-md-6 mb-3">
 							<label for="nickname">이름</label>
-							<input type="text" class="form-control" name="name" id="nickname" placeholder="" required />
+							<input type="text" class="form-control" th:field="*{name}" th:errorclass="field-error"
+								id="nickname" placeholder="" required />
 							<div class="invalid-feedback">이름을 입력해주세요.</div>
+							<div th:errors="*{name}" class="field-error">입력값 오류메시지</div>
 						</div>
 					</div>
 
 					<div class="mb-3">
 						<label for="password">비밀번호</label>
-						<input type="password" name="password" class="form-control" id="password" placeholder=""
-							required />
+						<input type="password" th:field="*{password}" th:errorclass="field-error" class="form-control"
+							id="password" placeholder="" required />
 						<div id="pwMsg" class="invalid-feedback">비밀번호를 입력해주세요.</div>
+						<div th:errors="*{password}" class="field-error">입력값 오류메시지</div>
 					</div>
 
 					<div class="mb-3">
@@ -100,13 +111,16 @@
 
 					<div class="mb-3">
 						<label for="address2" style="display: block">차량정보</label>
-						<input type="text" style="display: inline-block" name="carName" class="form-control col-md-9"
-							id="carName" placeholder="검색 버튼을 눌러주세요." required />
+						<input type="text" style="display: inline-block" th:field="*{carName}"
+							th:errorclass="field-error" class="form-control col-md-9" id="carName"
+							placeholder="검색 버튼을 눌러주세요." required />
 						<button class="btn btn-outline-primary col-md-2 btn-sm" id="searchBtn" type="button">검색</button>
 						<div class="invalid-feedback">차량 정보를 검색해주세요.</div>
+						<div th:errors="*{carName}" class="field-error">입력값 오류메시지</div>
 						<input type="hidden" name="company" class="form-control" id="company" />
 						<input type="hidden" name="oilType" class="form-control" id="oilType" />
 						<input type="hidden" name="fuelEffi" class="form-control" id="fuelEffi" />
+						<input type="hidden" class="form-control" id="carNameChk" value="0" />
 					</div>
 
 					<div class="modal fade" id="testModal" tabindex="-1" role="dialog"
@@ -138,7 +152,9 @@
 						<label class="custom-control-label" for="aggrement">개인정보 수집 및 이용에 동의합니다.</label>
 					</div>
 					<div class="mb-4"></div>
-					<button class="btn btn-primary btn-lg btn-block" type="submit">가입 완료</button>
+					<button id="resetBtn" class="btn btn-outline-primary btn-lg btn-block" type="button">차량 입력 정보
+						변경하기</button>
+					<button id="submitBtn" class="btn btn-primary btn-lg btn-block" type="button">가입 완료</button>
 					<a class="btn btn-outline-primary btn-lg btn-block" href="/login">로그인 페이지로</a>
 				</form>
 			</div>
@@ -152,6 +168,23 @@
 		$(function () {
 			$("div.modal-footer button").click(function () {
 				$("#testModal").modal("hide");
+			});
+
+			$("button#resetBtn").click(function () {
+				$("input#carName").val("");
+				$("input#carNameChk").val(0);
+				$("input#carName").focus();
+				$("input#carName").attr("readonly", false);
+			});
+
+			$("button#submitBtn").click(function(){
+				let carNameChk = $("input#carNameChk").val();
+				if (carNameChk == 0) {
+					alert("차량 정보 검색 후 선택하여 입력해주세요.");
+					return;
+				}
+				
+				$("form.validation-form").submit();
 			});
 
 			$("input#passwordChk").keyup(function () {
@@ -211,6 +244,8 @@
 
 								$("input#company").val(company);
 								$("input#carName").val(carName);
+								$("input#carName").attr("readonly", true);
+								$("input#carNameChk").val(1);
 								$("input#oilType").val(oilType);
 								$("input#fuelEffi").val(fuelEffi);
 

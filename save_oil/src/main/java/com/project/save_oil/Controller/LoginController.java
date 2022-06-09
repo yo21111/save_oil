@@ -5,12 +5,19 @@ import java.net.URLEncoder;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.project.save_oil.domain.MemberDto;
 import com.project.save_oil.member.Member;
 import com.project.save_oil.member.MemberService;
+import com.project.save_oil.validation.MemberValidator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +26,8 @@ import lombok.RequiredArgsConstructor;
 @Controller
 public class LoginController {
 	private final MemberService memberService;
-
+	private final MemberValidator memberValidator;
+	
 	@GetMapping("/login")
 	public String login() {
 		return "index";
@@ -33,7 +41,7 @@ public class LoginController {
 			
 			if (mem.getPassword().equals(memberDto.getPassword())) {
 				session.setAttribute("uId_Session", mem.getId());
-				return "mainPage";
+				return "redirect:/";
 			} else {
 				return "redirect:/login?errorMsg="+errorMsg;
 			}
@@ -50,12 +58,17 @@ public class LoginController {
 	}
 
 	@GetMapping("/register")
-	public String register() {
+	public String register(Model m) {
+		m.addAttribute("member", new MemberDto());
 		return "register";
 	}
 
 	@PostMapping("/register")
-	public String insertMember(MemberDto memberDto) {
+	public String insertMember(@ModelAttribute("member") MemberDto memberDto, BindingResult bindingResult) {
+		memberValidator.validate(memberDto, bindingResult);
+		if (bindingResult.hasErrors()) {
+			return "register";
+		}
 		memberService.save(memberDto);
 		return "redirect:/login";
 	}

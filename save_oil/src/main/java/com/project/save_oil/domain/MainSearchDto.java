@@ -1,8 +1,12 @@
 package com.project.save_oil.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter
+@Setter
+@ToString
 public class MainSearchDto {
 	// 현재 위치 주소명
 	private String address;

@@ -39,6 +39,12 @@
 			-moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
 			box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
 		}
+
+		.field-error {
+			border-color: #dc3545;
+			color: #dc3545;
+			font-weight: bold;
+		}
 	</style>
 </head>
 
@@ -57,23 +63,31 @@
 		<div class="input-form-backgroud row">
 			<div class="input-form col-md-12 mx-auto">
 				<h4 class="mb-3">주변 주유소 검색하기</h4>
-				<form class="validation-form" novalidate method="post" action="/">
+				<form class="validation-form" novalidate method="post" action="/" th:object="${mainDto}">
+
 					<div class="mb-3">
 						<label for="address">주소 검색</label>
 						<div class="d-flex align-items-center justify-content-between">
-							<input readonly type="text" class="form-control col-md-10" id="address" placeholder="서울특별시 강남구"
-								name="address" required />
+							<input readonly type="text" class="form-control col-md-10" id="address"
+								placeholder="서울특별시 강남구" th:field="*{address}" th:errorclass="field-error" required />
 							<button id="searchBtn" type="button" class="btn btn-outline-primary btn">주소 검색</button>
 						</div>
 						<div class="invalid-feedback">주소를 입력해주세요.</div>
+						<div th:errors="*{address}" class="field-error">
+							주소입력 오류메시지
+						</div>
 					</div>
 					<div class="mb-3">
 						<label for="money">주유 금액 입력</label>
 						<div class="d-flex align-items-center justify-content-between">
 							<input type="text" class="form-control col-md-10" id="money"
-								placeholder="숫자만 입력해주세요 ex) 100000" name="money" required />
+								placeholder="숫자만 입력해주세요 ex) 100000" th:field="*{money}" th:errorclass="field-error"
+								required />
 						</div>
 						<div class="invalid-feedback">숫자로만 희망 주유 금액을 입력해주세요.</div>
+						<div th:errors="*{money}" class="field-error">
+							금액입력 오류메시지
+						</div>
 					</div>
 					<div class="mb-3">
 						<label for="radius">유류 선택</label>
@@ -105,8 +119,8 @@
 					<hr class="mb-4" />
 
 					<div class="mb-4"></div>
-					<input type="hidden" name="x" id="x" required/>
-					<input type="hidden" name="y" id="y" required/>
+					<input type="hidden" name="x" id="x" required />
+					<input type="hidden" name="y" id="y" required />
 					<button class="btn btn-primary btn-lg btn-block" type="submit">검색 하기</button>
 				</form>
 			</div>
