@@ -119,12 +119,13 @@
 					success: function (response) {
 						var resultData = response.features;
 
-						var tDistance = "총 거리 : " + (resultData[0].properties.totalDistance / 1000).toFixed(1) + "km,";
-						var tTime = " 총 시간 : " + (resultData[0].properties.totalTime / 60).toFixed(0) + "분";
+						var tDistance = (resultData[0].properties.totalDistance / 1000).toFixed(1) + "km";
+						var tTime = ((resultData[0].properties.totalTime) / 60).toFixed(0)+ "분" ;
 						var tFare = " 총 요금 : " + resultData[0].properties.totalFare + "원,";
 						var taxiFare = " 예상 택시 요금 : " + resultData[0].properties.taxiFare + "원";
-
-						$("#result").text(tDistance + tTime);
+						
+						$("td#arriveTime").text(tTime);
+						$("td#distance").text(tDistance);
 
 						//교통정보 표출 옵션값을 체크
 						if (trafficInfochk == "Y") {
@@ -452,7 +453,7 @@
 		<div class="input-form-backgroud row">
 			<div class="input-form col-md-12 mx-auto">
 				<h4 class="mb-3">주유소 세부 검색결과</h4>
-				<h6 class="mb-3">교통정보 표출옵션 사용 시 교통 상황 표기</h6>
+				<h6 class="mb-3">교통정보 표출옵션 사용 시 교통 상황 표기 (적용하기 클릭 후 세부 내용 확인 가능합니다.)</h6>
 
 				<div class="ft_area">
 					<div class="ft_select_wrap">
@@ -499,6 +500,14 @@
 							<tr>
 								<td>주유소 이름</td>
 								<td th:text="${gasDto.POLL_DIV_CD + ' ' + gasDto.OS_NM}">상표 + 상호</td>
+							</tr>
+							<tr>
+								<td>이동 시간</td>
+								<td id="arriveTime"></td>
+							</tr>
+							<tr>
+								<td>이동 거리</td>
+								<td id="distance"></td>
 							</tr>
 							<tr>
 								<td>위치</td>

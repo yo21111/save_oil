@@ -1,7 +1,9 @@
 package com.project.save_oil.service;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -72,35 +74,31 @@ public class MainService {
 		return result;
 	}
 
-	public String searchPageProc(MainSearchDto mainDto) {
+	public String searchPageProc(MainSearchDto mainDto) throws Exception {
 		StringBuffer result = new StringBuffer();
 		String returnLine;
 
-		try {
-			// 1. mainDto 내용을 바탕으로 반경내 주유소 결과 가져오기
-			String apiUrl = "http://www.opinet.co.kr/api/aroundAll.do" + "?code=F220607178" + "&x=" + mainDto.getX()
-					+ "&y=" + mainDto.getY() + "&radius=" + mainDto.getRadius() + "&sort=" + mainDto.getSort()
-					+ "&prodcd=" + mainDto.getOilType() + "&out=json";
-			URL url = new URL(apiUrl);
-			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-			urlConnection.setRequestMethod("GET");
-			BufferedReader br;
+		// 1. mainDto 내용을 바탕으로 반경내 주유소 결과 가져오기
+		String apiUrl = "http://www.opinet.co.kr/api/aroundAll.do" + "?code=F220607178" + "&x=" + mainDto.getX() + "&y="
+				+ mainDto.getY() + "&radius=" + mainDto.getRadius() + "&sort=" + mainDto.getSort() + "&prodcd="
+				+ mainDto.getOilType() + "&out=json";
+		URL url = new URL(apiUrl);
+		HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+		urlConnection.setRequestMethod("GET");
+		BufferedReader br;
 
-			if (urlConnection.getResponseCode() >= 200 && urlConnection.getResponseCode() <= 300) {
-				br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
-			} else {
-				br = new BufferedReader(new InputStreamReader(urlConnection.getErrorStream()));
-			}
-
-			while ((returnLine = br.readLine()) != null) {
-				result.append(returnLine + "\n");
-			}
-
-			br.close();
-			urlConnection.disconnect();
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (urlConnection.getResponseCode() >= 200 && urlConnection.getResponseCode() <= 300) {
+			br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+		} else {
+			br = new BufferedReader(new InputStreamReader(urlConnection.getErrorStream()));
 		}
+
+		while ((returnLine = br.readLine()) != null) {
+			result.append(returnLine + "\n");
+		}
+
+		br.close();
+		urlConnection.disconnect();
 		return result.toString();
 	}
 
@@ -143,36 +141,32 @@ public class MainService {
 		return list;
 	}
 
-	public String resultPageProc(String UNI_ID) {
+	public String resultPageProc(String UNI_ID) throws Exception {
 		// UNI_ID 값을 바탕으로 주유소 세부 정보 가져오기
 		StringBuffer result = new StringBuffer();
 
-		try {
-			// 1. mainDto 내용을 바탕으로 반경내 주유소 결과 가져오기
-			String apiUrl = "http://www.opinet.co.kr/api/detailById.do" + "?code=F220607178" + "&id=" + UNI_ID
-					+ "&out=json";
-			URL url = new URL(apiUrl);
-			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-			urlConnection.setRequestMethod("GET");
-			BufferedReader br;
+		// 1. mainDto 내용을 바탕으로 반경내 주유소 결과 가져오기
+		String apiUrl = "http://www.opinet.co.kr/api/detailById.do" + "?code=F220607178" + "&id=" + UNI_ID
+				+ "&out=json";
+		URL url = new URL(apiUrl);
+		HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+		urlConnection.setRequestMethod("GET");
+		BufferedReader br;
 
-			if (urlConnection.getResponseCode() >= 200 && urlConnection.getResponseCode() <= 300) {
-				br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
-			} else {
-				br = new BufferedReader(new InputStreamReader(urlConnection.getErrorStream()));
-			}
-
-			String returnLine;
-
-			while ((returnLine = br.readLine()) != null) {
-				result.append(returnLine + "\n");
-			}
-
-			br.close();
-			urlConnection.disconnect();
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (urlConnection.getResponseCode() >= 200 && urlConnection.getResponseCode() <= 300) {
+			br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+		} else {
+			br = new BufferedReader(new InputStreamReader(urlConnection.getErrorStream()));
 		}
+
+		String returnLine;
+
+		while ((returnLine = br.readLine()) != null) {
+			result.append(returnLine + "\n");
+		}
+
+		br.close();
+		urlConnection.disconnect();
 		return result.toString();
 	}
 

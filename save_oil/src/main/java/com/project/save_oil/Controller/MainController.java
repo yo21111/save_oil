@@ -29,11 +29,6 @@ public class MainController {
 	private final ApiKey API_KEY;
 	private final MainValidator mainValidator;
 	
-	@InitBinder
-	public void init(WebDataBinder dataBinder) {
-		dataBinder.addValidators(mainValidator);
-	}
-	
 	@GetMapping("/")
 	public String main(HttpSession session, Model m) {
 		// 세션에 저장된 값이 남아있지 않도록 메인페이지에서는 null값 입력
@@ -46,10 +41,11 @@ public class MainController {
 
 	// BindingResult는 데이터를 받는 객체 이후에 작성
 	@PostMapping("/")
-	public String searchPage(HttpSession session, Model m, @Validated @ModelAttribute("mainDto") MainSearchDto mainDto,
+	public String searchPage(HttpSession session, Model m, @ModelAttribute("mainDto") MainSearchDto mainDto,
 			BindingResult bindingResult) throws Exception {
 		String id = (String) session.getAttribute("uId_Session");
 		
+		mainValidator.validate(mainDto, bindingResult);
 		// 검증 실패시 다시 메인페이지로 이동
 		if (bindingResult.hasErrors()) {
 			return "mainPage";

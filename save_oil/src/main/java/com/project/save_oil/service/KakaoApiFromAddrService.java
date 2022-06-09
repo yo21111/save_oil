@@ -21,8 +21,8 @@ public class KakaoApiFromAddrService {
 	private ApiKey API_KEY;
 	@Autowired
 	ConnectUrl connectUrl;
-	
-	public Map<String, Object> parseToMap(String jsonString) throws ParseException {
+
+	public Map<String, Object> parseToMap(String jsonString) throws Exception {
 
 		JSONParser jsonParser = new JSONParser();
 		JSONObject jsonObject = (JSONObject) jsonParser.parse(jsonString);
@@ -50,38 +50,34 @@ public class KakaoApiFromAddrService {
 		return map;
 	}
 
-	public List<String> transFormPoint(List<String> list) {
+	public List<String> transFormPoint(List<String> list) throws Exception {
 		String apiKey = API_KEY.getKAKAO_ADRESS();
 		String apiUrl = "https://dapi.kakao.com/v2/local/geo/transcoord.json";
 		String jsonString = null;
 
-		try {
-			String addr = apiUrl + "?x=" + list.get(0) + "&y=" + list.get(1) + "&output_coord=KTM";
+		String addr = apiUrl + "?x=" + list.get(0) + "&y=" + list.get(1) + "&output_coord=KTM";
 
-			jsonString = connectUrl.connectApi(addr, apiKey);
+		jsonString = connectUrl.connectApi(addr, apiKey);
 
-			JSONParser jsonParser = new JSONParser();
-			JSONObject jsonObject = (JSONObject) jsonParser.parse(jsonString);
-			JSONArray dataList = (JSONArray) jsonObject.get("documents");
+		JSONParser jsonParser = new JSONParser();
+		JSONObject jsonObject = (JSONObject) jsonParser.parse(jsonString);
+		JSONArray dataList = (JSONArray) jsonObject.get("documents");
 
-			String x = "";
-			String y = "";
-			for (int i = 0; i < dataList.size(); i++) {
-				JSONObject data = (JSONObject) dataList.get(i);
-				if (data.containsKey("x")) {
-					x = data.get("x").toString();
-				}
-				if (data.containsKey("y")) {
-					y = data.get("y").toString();
-				}
+		String x = "";
+		String y = "";
+		for (int i = 0; i < dataList.size(); i++) {
+			JSONObject data = (JSONObject) dataList.get(i);
+			if (data.containsKey("x")) {
+				x = data.get("x").toString();
 			}
-
-			list.set(0, x);
-			list.set(1, y);
-
-		} catch (Exception e) {
-			e.printStackTrace();
+			if (data.containsKey("y")) {
+				y = data.get("y").toString();
+			}
 		}
+
+		list.set(0, x);
+		list.set(1, y);
+
 		return list;
 	}
 }
