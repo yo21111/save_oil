@@ -17,17 +17,7 @@
 			min-height: 100vh;
 		}
 
-		a#update {
-			transform: translateX(-50px);
-		}
-
-		a#logout {
-			transform: translateX(-50px);
-		}
-
 		.input-form {
-			max-width: 680px;
-
 			margin-top: 80px;
 			padding: 32px;
 
@@ -44,6 +34,12 @@
 			border-color: #dc3545;
 			color: #dc3545;
 			font-weight: bold;
+		}
+
+		@media (min-width: 768px) {
+			.bd-placeholder-img-lg {
+				font-size: 3.5rem;
+			}
 		}
 	</style>
 </head>
@@ -70,7 +66,7 @@
 						<div class="d-flex align-items-center justify-content-between">
 							<input readonly type="text" class="form-control col-md-10" id="address"
 								placeholder="서울특별시 강남구" th:field="*{address}" th:errorclass="field-error" required />
-							<button id="searchBtn" type="button" class="btn btn-outline-primary btn">주소 검색</button>
+							<button id="searchBtn" type="button" class="btn btn-outline-primary btn">검색</button>
 						</div>
 						<div class="invalid-feedback">주소를 입력해주세요.</div>
 						<div th:errors="*{address}" class="field-error">
