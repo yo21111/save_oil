@@ -32,9 +32,6 @@ public class MainController {
 	@GetMapping("/")
 	public String main(HttpSession session, Model m) {
 		// 세션에 저장된 값이 남아있지 않도록 메인페이지에서는 null값 입력
-		if (session.getAttribute("MainSearchDto") != null) {
-			session.setAttribute("MainSearchDto", null);
-		}
 		m.addAttribute("mainDto", new MainSearchDto());
 		return "mainPage";
 	}
@@ -44,19 +41,20 @@ public class MainController {
 	public String searchPage(HttpSession session, Model m, @ModelAttribute("mainDto") MainSearchDto mainDto,
 			BindingResult bindingResult) throws Exception {
 		String id = (String) session.getAttribute("uId_Session");
-		
-		mainValidator.validate(mainDto, bindingResult);
-		// 검증 실패시 다시 메인페이지로 이동
-		if (bindingResult.hasErrors()) {
-			return "mainPage";
-		}
-
 		// 세부페이지에서 리스트로 돌아오는 경우 제외
-		if (session.getAttribute("MainSearchDto") == null) {
-			session.setAttribute("MainSearchDto", mainDto);
+
+		MainSearchDto mainDtoSession = (MainSearchDto)session.getAttribute("MainSearchDto");
+		
+		if (mainDtoSession != null) {
+			mainDto = mainDtoSession;
 			m.addAttribute("mainDto", mainDto);
 		} else {
-			mainDto = (MainSearchDto) session.getAttribute("MainSearchDto");
+			session.setAttribute("MainSearchDto", mainDto);
+			mainValidator.validate(mainDto, bindingResult);
+			// 검증 실패시 다시 메인페이지로 이동
+			if (bindingResult.hasErrors()) {
+				return "mainPage";
+			}
 		}
 
 		Integer money = mainDto.getMoney();
