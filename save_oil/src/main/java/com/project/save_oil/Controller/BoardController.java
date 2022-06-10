@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import com.project.save_oil.board.Board;
 import com.project.save_oil.board.BoardDto;
 import com.project.save_oil.board.BoardService;
+import com.project.save_oil.validation.BoardValidator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,7 +26,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/board")
 public class BoardController {
 	private final BoardService boardService;
-
+	private final BoardValidator boardValidator;
+	
 	//	1. 전체 게시글 리스트를 출력하는 메서드 : /list
 	@GetMapping("/list/{search}")
 	public String getBoardList(@PathVariable String search, Model m) {
@@ -52,9 +55,12 @@ public class BoardController {
 	
 	//	4. 작성 내용을 서버로 전송하는 메서드 : /write
 	@PostMapping("/write")
-	public String writeBoard(@SessionAttribute("uId_Session") String id, @ModelAttribute("board") BoardDto boardDto, Model m) throws Exception {
+	public String writeBoard(@SessionAttribute("uId_Session") String id, @ModelAttribute("board") BoardDto boardDto, BindingResult bindingResult, Model m) throws Exception {
 		// 제목에 대한 유효성 검사 -> 다시 /write 로 돌아가기
-		
+		boardValidator.validate(boardDto, bindingResult);
+		if (bindingResult.hasErrors()) {
+			return "";
+		}
 		
 		Board board = boardService.writeBoard(id, boardDto);
 		return "redirect:/board/read/"+board.getWNo();
@@ -69,8 +75,12 @@ public class BoardController {
 	}
 	//	6. 수정 내용을 서버로 전송하는 메서드 : /rewrite
 	@PostMapping("/rewrite/{wNo}")
-	public String reWriteBoard(@PathVariable Integer wNo, BoardDto boardDto) throws Exception {
+	public String reWriteBoard(@PathVariable Integer wNo, @ModelAttribute("board") BoardDto boardDto, BindingResult bindingResult) throws Exception {
 		// 제목에 대한 유효성 검사 -> 다시 /rewrite 로 돌아가기
+		boardValidator.validate(boardDto, bindingResult);
+		if (bindingResult.hasErrors()) {
+			return "";
+		}
 		
 		boardService.reWriteBoard(boardDto);
 		return "redirect:/board/read/"+wNo;
