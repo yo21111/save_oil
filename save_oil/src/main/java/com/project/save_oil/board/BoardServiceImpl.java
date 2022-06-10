@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,8 +32,14 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	@Transactional
 	public List<Board> getBoardList(String search) {
-		List<Board> listByTitle = boardRepository.findByTitleContains(search);
-		List<Board> listByContent = boardRepository.findByContentContains(search);
+		if(search == null || search.equals("")) {
+			Sort sort = Sort.by(Sort.Order.desc("wNo"), Sort.Order.desc("viewCnt"));
+			List<Board> list = boardRepository.findAll(sort);
+			return list;
+		}
+		
+		List<Board> listByTitle = boardRepository.findByTitleContainsOrderByViewCntDesc(search);
+		List<Board> listByContent = boardRepository.findByContentContainsOrderByViewCntDesc(search);
 		return Stream.of(listByTitle, listByContent).flatMap(x -> x.stream()).collect(Collectors.toList());
 	}
 	

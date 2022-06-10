@@ -29,11 +29,11 @@ public class BoardController {
 	private final BoardValidator boardValidator;
 	
 	//	1. 전체 게시글 리스트를 출력하는 메서드 : /list
-	@GetMapping("/list/{search}")
-	public String getBoardList(@PathVariable String search, Model m) {
+	@GetMapping("/list")
+	public String getBoardList(String search, Model m) {
 		List<Board> list = boardService.getBoardList(search);
 		m.addAttribute("boardList", list);
-		return "";
+		return "boardList";
 	}
 	
 	//	2. 게시글 페이지를 출력하는 메서드 : /read

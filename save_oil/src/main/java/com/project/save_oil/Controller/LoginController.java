@@ -33,9 +33,16 @@ public class LoginController {
 	}
 
 	@PostMapping("/login")
-	public String loginProc(MemberDto memberDto, HttpSession session) throws Exception {
-		String errorMsg = URLEncoder.encode("아이디 또는 비밀번호를 확인해주세요.", "UTF-8");
-		Member mem = memberService.findById(memberDto.getId());
+	public String loginProc(MemberDto memberDto, HttpSession session) {
+		Member mem = null;
+		String errorMsg = "";
+		try {
+			errorMsg = URLEncoder.encode("아이디 또는 비밀번호를 확인해주세요.", "UTF-8");
+			mem = memberService.findById(memberDto.getId());
+		} catch(Exception e) {
+			e.printStackTrace();
+			return "redirect:/login?errorMsg=" + errorMsg;
+		} 
 
 		if (mem.getPassword().equals(memberDto.getPassword())) {
 			session.setAttribute("uId_Session", mem.getId());
