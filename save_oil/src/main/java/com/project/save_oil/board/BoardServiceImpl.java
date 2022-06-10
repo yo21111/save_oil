@@ -38,9 +38,8 @@ public class BoardServiceImpl implements BoardService {
 			return list;
 		}
 		
-		List<Board> listByTitle = boardRepository.findByTitleContainsOrderByViewCntDesc(search);
-		List<Board> listByContent = boardRepository.findByContentContainsOrderByViewCntDesc(search);
-		return Stream.of(listByTitle, listByContent).flatMap(x -> x.stream()).collect(Collectors.toList());
+		List<Board> listBy = boardRepository.findByTitleContainsIgnoreCaseOrContentContainsIgnoreCaseOrderByViewCntDesc(search, search);
+		return listBy;
 	}
 	
 	//3. 게시글 작성하기
