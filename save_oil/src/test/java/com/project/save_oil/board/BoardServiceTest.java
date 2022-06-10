@@ -1,6 +1,7 @@
 package com.project.save_oil.board;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -81,8 +82,26 @@ public class BoardServiceTest {
 		search = "cont";
 		List<Board> list2 = boardService.getBoardList(search);
 		assertTrue(list.size() == list2.size());
-		
 	}
 	
+	@Test
+	public void reWriteBoard() throws Exception {
+		Member member = memberRepo.findAll().get(0);
+		BoardDto boardDto = new BoardDto();
+		boardDto.setTitle("TestTitle");
+		boardDto.setContent("TestContent");
+		Board board = boardService.writeBoard(member.getId(), boardDto);
+		Integer wNo = board.getWNo();
+		
+		
+		boardDto.setWNo(wNo);
+		boardDto.setTitle("TestTitleReWrite");
+		boardDto.setContent("TestContentReWrite");
+		boardService.reWriteBoard(boardDto);
+		Board boardAfter = boardService.getBoard(wNo);
+		
+		assertFalse(board.getTitle().equals(boardAfter.getTitle()));
+		assertFalse(board.getContent().equals(boardAfter.getContent()));
+	}
 	
 }

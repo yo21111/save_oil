@@ -10,7 +10,7 @@ public interface BoardService {
 	public List<Board> getBoardList(String search);
 	
 	//3. 게시글 작성하기
-	public void writeBoard(String id, BoardDto boardDto)  throws Exception;
+	public Board writeBoard(String id, BoardDto boardDto)  throws Exception;
 
 	//4. 게시글 수정하기
 	public void reWriteBoard(BoardDto boardDto);

@@ -39,10 +39,11 @@ public class BoardServiceImpl implements BoardService {
 	//3. 게시글 작성하기
 	@Override
 	@Transactional
-	public void writeBoard(String id, BoardDto boardDto) throws Exception {
+	public Board writeBoard(String id, BoardDto boardDto) throws Exception {
 		Member member = memberRepository.findById(id).orElseThrow(NullPointerException::new);
 		boardDto.setMember(member);
-		boardRepository.save(boardDto.toEntity());
+		Board board = boardRepository.save(boardDto.toEntity());
+		return board;
 	}
 
 	//4. 게시글 수정하기
