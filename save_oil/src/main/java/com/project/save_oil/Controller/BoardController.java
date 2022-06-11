@@ -41,16 +41,14 @@ public class BoardController {
 	public String getBoardPage(@PathVariable Integer wNo, Model m) throws Exception {
 		Board board = boardService.getBoard(wNo);
 		m.addAttribute("board", board);
-		// 게시글 페이지는 수정, 작성이 불가능 하도록
-		m.addAttribute("readonly", "readonly");
-		return "";
+		return "board";
 	}
 	
 	//	3. 게시글을 작성 페이지를 출력하는 메서드 : /write
 	@GetMapping("/write")
 	public String writeBoardPage(Model m) {
 		m.addAttribute("board", new BoardDto());
-		return "";
+		return "boardWrite";
 	}
 	
 	//	4. 작성 내용을 서버로 전송하는 메서드 : /write
@@ -59,7 +57,7 @@ public class BoardController {
 		// 제목에 대한 유효성 검사 -> 다시 /write 로 돌아가기
 		boardValidator.validate(boardDto, bindingResult);
 		if (bindingResult.hasErrors()) {
-			return "";
+			return "board";
 		}
 		
 		Board board = boardService.writeBoard(id, boardDto);
@@ -71,7 +69,7 @@ public class BoardController {
 	public String reWriteBoardPage(@PathVariable Integer wNo, Model m) throws Exception {
 		Board board = boardService.getBoard(wNo);
 		m.addAttribute("board", board);
-		return "";
+		return "boardWrite";
 	}
 	//	6. 수정 내용을 서버로 전송하는 메서드 : /rewrite
 	@PostMapping("/rewrite/{wNo}")
@@ -79,7 +77,7 @@ public class BoardController {
 		// 제목에 대한 유효성 검사 -> 다시 /rewrite 로 돌아가기
 		boardValidator.validate(boardDto, bindingResult);
 		if (bindingResult.hasErrors()) {
-			return "";
+			return "boardWrite";
 		}
 		
 		boardService.reWriteBoard(boardDto);
