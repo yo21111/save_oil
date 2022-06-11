@@ -1,7 +1,9 @@
 package com.project.save_oil.board;
 
 import java.util.Date;
+import java.util.List;
 
+import com.project.save_oil.comment.CommentDto;
 import com.project.save_oil.member.Member;
 
 import lombok.Data;
@@ -23,6 +25,7 @@ public class BoardDto {
 	// 조회수
 	private Integer viewCnt;
 	
+	private List<CommentDto> comments;
 	
 	/* Dto -> Entity */
 	public Board toEntity() {

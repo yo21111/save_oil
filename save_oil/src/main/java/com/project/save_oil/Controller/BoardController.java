@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import com.project.save_oil.board.Board;
 import com.project.save_oil.board.BoardDto;
 import com.project.save_oil.board.BoardService;
+import com.project.save_oil.comment.CommentDto;
 import com.project.save_oil.validation.BoardValidator;
 
 import lombok.RequiredArgsConstructor;
@@ -38,7 +39,11 @@ public class BoardController {
 	@GetMapping("/read/{wNo}")
 	public String getBoardPage(@PathVariable Integer wNo, Model m) throws Exception {
 		Board board = boardService.getBoard(wNo);
+		List<CommentDto> commentList = board.getComments();
+		
 		m.addAttribute("board", board);
+		m.addAttribute("commentList", commentList);
+		
 		return "board";
 	}
 	
