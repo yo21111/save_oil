@@ -2,8 +2,6 @@ package com.project.save_oil.Controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -57,7 +55,8 @@ public class BoardController {
 		// 제목에 대한 유효성 검사 -> 다시 /write 로 돌아가기
 		boardValidator.validate(boardDto, bindingResult);
 		if (bindingResult.hasErrors()) {
-			return "board";
+			m.addAttribute("board", boardDto);
+			return "boardWrite";
 		}
 		
 		Board board = boardService.writeBoard(id, boardDto);

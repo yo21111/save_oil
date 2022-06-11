@@ -20,7 +20,7 @@ public class BoardValidator implements Validator {
 		BoardDto boardDto = (BoardDto)target;
 		
 		if(!StringUtils.hasLength(boardDto.getTitle())) {
-			errors.reject("title", "required");
+			errors.rejectValue("title", "required");
 		}
 	}
 	

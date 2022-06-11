@@ -36,12 +36,13 @@
 		div.boardBox {
 			flex-wrap: wrap;
 		}
-
+		
 		div.board {
 			width: 49%;
 			padding: 10px;
 			border: 1px solid #ccc;
 			border-radius: 7px;
+			cursor: pointer;
 		}
 		
 		div.wNo {
@@ -77,11 +78,6 @@
 	<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark" aria-label="Main navigation">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="#">Save Oil</a>
-			<button class="navbar-toggler p-0 border-0" type="button" id="navbarSideCollapse"
-				aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-
 			<div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 					<li class="nav-item">
@@ -108,13 +104,17 @@
 				</form>
 			</div>
 		</div>
-
+		
+		<div class="border-bottom p-3 text-right mb-2">
+			<a href="/board/write" class="btn btn-outline-dark">글쓰기</a>
+		</div>
+		
 		<div class="boardBox d-flex justify-content-between my-3 p-3 bg-body rounded shadow-sm">
-			<div th:if="${boardList.size eq 0}" class="board pt-3 border-bottom pb-2 mb-0">
+			<div th:if="${boardList.size eq 0}" class="pt-3 border-bottom pb-2 mb-0">
 				<h3 class="m-4 text-center">조회된 결과가 없습니다.</h3>
 			</div>
 			<div th:if="${boardList.size ne 0}" th:each="board : ${boardList}"
-				class="board pt-3 border-bottom pb-2 mb-0">
+				class="board pt-3 border-bottom pb-2 mb-1">
 				<div class="wNo" th:text="${board.wNo}"></div>
 				<div>
 					<h4 class="fw-bold" th:text="${board.title}"></h4>
@@ -158,6 +158,11 @@
 
 			$("form#searchForm").attr("action", "/board/list?search=" + search);
 			$("form#searchForm").submit();
+		});
+		
+		$("div.board").click(function(){
+			let wNo = $(this).children().eq(0).text();
+			location.href = "/board/read/"+wNo;
 		});
 	</script>
 </body>
