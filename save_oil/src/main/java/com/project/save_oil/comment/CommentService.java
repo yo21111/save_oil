@@ -18,13 +18,13 @@ public class CommentService {
 	private final BoardRepository boardRepo;
 	
 	@Transactional
-	public void save(String id, Integer wNo, CommentDto cmntDto) {
+	public Comment save(String id, Integer wNo, CommentDto cmntDto) {
 		Member member = memRepo.findById(id).orElseThrow(IllegalArgumentException::new);
 		Board board = boardRepo.findById(wNo).orElseThrow(IllegalArgumentException::new);
 		
 		cmntDto.setMember(member);
 		cmntDto.setBoard(board);
 		
-		cmntRepo.save(cmntDto.toEntity());
+		return cmntRepo.save(cmntDto.toEntity());
 	}
 }
