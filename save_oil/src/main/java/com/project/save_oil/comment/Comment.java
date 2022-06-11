@@ -53,7 +53,7 @@ public class Comment {
 	private Date reWriteDate;
 
 	// 게시글 번호
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	@ManyToOne
 	@JoinColumn(name="board_wNo")
 	private Board board;
 
