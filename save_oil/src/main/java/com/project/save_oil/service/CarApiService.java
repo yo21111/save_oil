@@ -8,6 +8,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.PatternMatchUtils;
 
 import com.project.save_oil.domain.CarDataDto;
 
@@ -49,9 +50,9 @@ public class CarApiService {
 		if (search == null) {
 			search = "";
 		} else {
-			search = search.toLowerCase();
+			search = "*" + search.toLowerCase()+"*";
 		}
-		if (name.indexOf(search) != -1 || comp.indexOf(search) != -1) {
+		if (PatternMatchUtils.simpleMatch(search, name) || PatternMatchUtils.simpleMatch(search, comp)) {
 			result = true;
 		} else if (search.length() == 0) {
 			result = true;
